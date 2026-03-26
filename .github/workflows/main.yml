@@ -1,0 +1,21 @@
+name: Build APK
+on: [push, workflow_dispatch]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Buildozer Action
+        uses: ArtemSashko/buildozer-action@v1
+        with:
+          buildozer_version: master
+          command: buildozer android debug
+          repository_read_token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Upload APK
+        uses: actions/upload-artifact@v2
+        with:
+          name: package
+          path: bin/*.apk
